@@ -1,24 +1,15 @@
 package com.studenti.studentiSpring.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
+
 
 
 public class TeacherDTO {
 
     private Long id;
-
-
     private String firstName;
-
-
     private String lastName;
-
     private String email;
-
     private Integer age;
-
 
     public TeacherDTO() {
     }
@@ -31,13 +22,13 @@ public class TeacherDTO {
         this.id = id;
     }
 
-    public TeacherDTO(String firstName, String lastName, String email, Integer age) {
+    public TeacherDTO(String firstName, String lastName, String email, Integer age){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
-    }
 
+    }
 
     public Long getId() {
         return id;

@@ -20,18 +20,23 @@ public class StudentDTO {
     @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
 
+
+
+    private Long addressId;
+
+
     public StudentDTO() {
     }
 
-    public StudentDTO(Long id, String firstName, String lastName, String email, LocalDate dateOfBirth) {
+    public StudentDTO(Long id, String firstName, String lastName, String email, LocalDate dateOfBirth, Long adressId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
+        this.addressId = adressId;
     }
 
-    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -46,4 +51,11 @@ public class StudentDTO {
 
     public LocalDate getDateOfBirth() { return dateOfBirth; }
     public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
 }

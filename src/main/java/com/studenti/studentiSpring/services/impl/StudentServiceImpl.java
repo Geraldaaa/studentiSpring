@@ -1,7 +1,9 @@
 package com.studenti.studentiSpring.services.impl;
 
 import com.studenti.studentiSpring.dto.StudentDTO;
+import com.studenti.studentiSpring.models.Address;
 import com.studenti.studentiSpring.models.Student;
+import com.studenti.studentiSpring.repositories.AddressRepository;
 import com.studenti.studentiSpring.repositories.StudentRepository;
 import com.studenti.studentiSpring.services.StudentService;
 import org.springframework.stereotype.Service;
@@ -15,28 +17,32 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository repository;
+    private final AddressRepository addressRepository;
 
-    public StudentServiceImpl(StudentRepository repository) {
+    public StudentServiceImpl(StudentRepository repository, AddressRepository addressRepository) {
         this.repository = repository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
     public StudentDTO createStudent(StudentDTO dto) {
-        Student student = new Student(dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getDateOfBirth());
+        Address address = addressRepository.findById(dto.getAddressId())
+                .orElseThrow(() -> new RuntimeException("Address not found with id: "));
+        Student student = new Student(dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getDateOfBirth(),address);
         Student saved = repository.save(student);
-        return new StudentDTO(saved.getId(), saved.getFirstName(), saved.getLastName(), saved.getEmail(), saved.getDateOfBirth());
+        return new StudentDTO(saved.getId(), saved.getFirstName(), saved.getLastName(), saved.getEmail(), saved.getDateOfBirth(), saved.getAddress().getId());
     }
 
     @Override
     public StudentDTO getStudentById(Long id) {
         Student s = repository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
-        return new StudentDTO(s.getId(), s.getFirstName(), s.getLastName(), s.getEmail(), s.getDateOfBirth());
+        return new StudentDTO(s.getId(), s.getFirstName(), s.getLastName(), s.getEmail(), s.getDateOfBirth(), s.getAddress().getId());
     }
 
     @Override
     public List<StudentDTO> getAllStudents() {
         return repository.findAll().stream()
-                .map(s -> new StudentDTO(s.getId(), s.getFirstName(), s.getLastName(), s.getEmail(), s.getDateOfBirth()))
+                .map(s -> new StudentDTO(s.getId(), s.getFirstName(), s.getLastName(), s.getEmail(), s.getDateOfBirth(), s.getAddress().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +57,7 @@ public class StudentServiceImpl implements StudentService {
         existing.setDateOfBirth(dto.getDateOfBirth());
 
         Student updated = repository.save(existing);
-        return new StudentDTO(updated.getId(), updated.getFirstName(), updated.getLastName(), updated.getEmail(), updated.getDateOfBirth());
+        return new StudentDTO(updated.getId(), updated.getFirstName(), updated.getLastName(), updated.getEmail(), updated.getDateOfBirth(), updated.getAddress().getId());
     }
 
     @Override

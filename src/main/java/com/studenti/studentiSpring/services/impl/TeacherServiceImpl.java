@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class TeacherServiceImpl implements TeacherService {
 
 
-    private TeacherRepository repo;
+    private final TeacherRepository repo;
 
     public TeacherServiceImpl(TeacherRepository repo) {
         this.repo = repo;
@@ -65,7 +65,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherDTO getTeacher(Long id) {
-        Teacher t = repo.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
+        Teacher t = repo.findById(id).orElseThrow(() -> new RuntimeException("Teacher not found"));
         return new TeacherDTO(t.getId(), t.getFirstName(), t.getLastName(), t.getEmail(), t.getAge());
     }
 

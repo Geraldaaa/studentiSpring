@@ -2,6 +2,9 @@ package com.studenti.studentiSpring.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name="teachers")
@@ -17,6 +20,8 @@ public class Teacher {
     private String email;
     private Integer age;
 
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private Set<Course> courses = new HashSet<>();
 
     public Teacher() {
     }
@@ -29,17 +34,9 @@ public class Teacher {
         this.age = age;
     }
 
-    public Teacher(String firstName, String lastName, String email, Integer age) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.age = age;
-    }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -47,7 +44,6 @@ public class Teacher {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -55,7 +51,6 @@ public class Teacher {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -63,7 +58,6 @@ public class Teacher {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -71,8 +65,10 @@ public class Teacher {
     public Integer getAge() {
         return age;
     }
-
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public Set<Course> getCourses() { return courses; }
+    public void setCourses(Set<Course> courses) { this.courses = courses; }
 }
