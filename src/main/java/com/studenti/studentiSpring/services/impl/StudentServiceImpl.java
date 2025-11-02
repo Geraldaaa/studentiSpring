@@ -2,14 +2,18 @@ package com.studenti.studentiSpring.services.impl;
 
 import com.studenti.studentiSpring.dto.StudentDTO;
 import com.studenti.studentiSpring.models.Address;
+import com.studenti.studentiSpring.models.Course;
 import com.studenti.studentiSpring.models.Student;
 import com.studenti.studentiSpring.repositories.AddressRepository;
+import com.studenti.studentiSpring.repositories.CourseRepository;
 import com.studenti.studentiSpring.repositories.StudentRepository;
 import com.studenti.studentiSpring.services.StudentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,19 +22,31 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository repository;
     private final AddressRepository addressRepository;
+    private final CourseRepository courseRepository;
 
-    public StudentServiceImpl(StudentRepository repository, AddressRepository addressRepository) {
+
+    public StudentServiceImpl(StudentRepository repository, AddressRepository addressRepository, CourseRepository courseRepository) {
         this.repository = repository;
         this.addressRepository = addressRepository;
+        this.courseRepository = courseRepository;
     }
 
     @Override
     public StudentDTO createStudent(StudentDTO dto) {
         Address address = addressRepository.findById(dto.getAddressId())
-                .orElseThrow(() -> new RuntimeException("Address not found with id: "));
-        Student student = new Student(dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getDateOfBirth(),address);
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        Set<Course> courses = new HashSet<>();
+        if (dto.getCourseIds() != null && !dto.getCourseIds().isEmpty()) {
+            courses.addAll(courseRepository.findAllById(dto.getCourseIds()));
+        }
+
+        Student student = new Student(dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getDateOfBirth(),address, courses);
+
         Student saved = repository.save(student);
-        return new StudentDTO(saved.getId(), saved.getFirstName(), saved.getLastName(), saved.getEmail(), saved.getDateOfBirth(), saved.getAddress().getId());
+        return new StudentDTO(saved.getId(), saved.getFirstName(), saved.getLastName(), saved.getEmail(), saved.getDateOfBirth(), saved.getAddress().getId(), saved.getCourses().stream().map(Course::getId).collect(Collectors.toCollection(HashSet::new)));
+
+
     }
 
     @Override

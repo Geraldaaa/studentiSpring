@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 public class StudentDTO {
     private Long id;
@@ -20,9 +22,9 @@ public class StudentDTO {
     @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
 
-
-
     private Long addressId;
+
+    private Set<Long> courseIds;
 
 
     public StudentDTO() {
@@ -35,6 +37,16 @@ public class StudentDTO {
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.addressId = adressId;
+    }
+
+    public StudentDTO(Long id, String firstName, String lastName, String email, LocalDate dateOfBirth, Long adressId, Set<Long> courseIds) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.addressId = adressId;
+        this.courseIds = courseIds;
     }
 
     public Long getId() { return id; }
@@ -57,5 +69,15 @@ public class StudentDTO {
     }
     public void setAddressId(Long addressId) {
         this.addressId = addressId;
+    }
+
+
+
+    public Set<Long> getCourseIds() {
+        return courseIds;
+    }
+
+    public void setCourseIds(Set<Long> courseIds) {
+        this.courseIds = courseIds;
     }
 }

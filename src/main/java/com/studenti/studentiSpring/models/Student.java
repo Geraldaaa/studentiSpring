@@ -45,6 +45,16 @@ public class Student {
         this.address = address;
     }
 
+    public Student(String firstName, String lastName, String email, LocalDate dateOfBirth, Address address, Set<Course> courses) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.courses = courses;
+
+    }
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
